@@ -45,6 +45,8 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        /* Camera previews were done using http://developer.android.com/guide/topics/media/camera.html */
+
         // Create an instance of Camera
         mCamera = getCameraInstance();
 

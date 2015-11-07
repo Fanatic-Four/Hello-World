@@ -74,7 +74,13 @@ public class MainActivity extends Activity implements OnClickListener {
         leftLang.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                //languageIdx
+                if (languageIdx == 0)  {
+                    languageIdx = languages.length - 1;
+                }
+                else {
+                    languageIdx = (languageIdx - 1);
+                }
+                lang.setText(languages[languageIdx]);
             }
         });
 

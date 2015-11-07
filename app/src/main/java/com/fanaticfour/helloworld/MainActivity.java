@@ -12,8 +12,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import android.util.Log;
 
-
-
 public class MainActivity extends Activity implements OnClickListener
 {
 
@@ -29,10 +27,38 @@ public class MainActivity extends Activity implements OnClickListener
         mText = (TextView) findViewById(R.id.txtSpeechInput);
         speakButton.setOnClickListener(this);
         sr = SpeechRecognizer.createSpeechRecognizer(this);
-        sr.setRecognitionListener(new listener());
+        final Listener listener = new Listener();
+        sr.setRecognitionListener(listener);
+
+        Button textButton = (Button) findViewById(R.id.onReadySpeech);
+        textButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startRecording();
+            }
+        });
+
+        Button onStopSpeech = (Button) findViewById(R.id.onStopSpeech);
+        onStopSpeech.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sr.stopListening();
+            }
+        });
     }
 
-    class listener implements RecognitionListener
+    public void startRecording(){
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE,"voice.recognition.test");
+
+        intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS,5);
+        sr.startListening(intent);
+        Log.i("111111","11111111");
+    }
+
+
+    class Listener implements RecognitionListener
     {
         public void onReadyForSpeech(Bundle params)
         {
@@ -44,7 +70,7 @@ public class MainActivity extends Activity implements OnClickListener
         }
         public void onRmsChanged(float rmsdB)
         {
-            //Log.d(TAG, "onRmsChanged");
+            Log.d(TAG, "onRmsChanged");
         }
         public void onBufferReceived(byte[] buffer)
         {

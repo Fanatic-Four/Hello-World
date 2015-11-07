@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.hardware.Camera;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -184,13 +185,28 @@ public class MainActivity extends Activity implements OnClickListener {
                         Log.i("Indico Sentiment", "sentiment of: " + result.getSentiment());
                         Double sentiment = result.getSentiment();
                         if (sentiment < 0.4) {
-                            moodText.setText("Negative");
+                            new MyAsyncTask() {
+                                protected void onPostExecute(Boolean result) {
+                                    moodText.setText(translatedText);
+                                    moodText.setTextColor(Color.RED);
+                                }
+                            }.execute("Negative");
                         }
                         else if (sentiment > 0.7) {
-                            moodText.setText("Positive");
+                            new MyAsyncTask() {
+                                protected void onPostExecute(Boolean result) {
+                                    moodText.setText(translatedText);
+                                    moodText.setTextColor(Color.GREEN);
+                                }
+                            }.execute("Positive");
                         }
                         else {
-                            moodText.setText("Neutral");
+                            new MyAsyncTask() {
+                                protected void onPostExecute(Boolean result) {
+                                    moodText.setText(translatedText);
+                                    moodText.setTextColor(Color.DKGRAY);
+                                }
+                            }.execute("Neutral");
                         }
                     }
                 });

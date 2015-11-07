@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.hardware.Camera;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -146,6 +147,7 @@ public class MainActivity extends Activity implements OnClickListener {
             ArrayList data = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
             for (int i = 0; i < data.size(); i++) {
                 Log.d(TAG, "result " + data.get(i));
+                //str += data.get(i);
             }
 
             String phrase = (String) data.get(0);
@@ -156,24 +158,44 @@ public class MainActivity extends Activity implements OnClickListener {
                 }
             }.execute(phrase);
 
+            //mText.setText("" + phrase);
+
             try {
                 Indico.sentiment.predict(phrase, new IndicoCallback<IndicoResult>() {
-                    @Override
-                    public void handle(IndicoResult result) throws IndicoException {
+                    @Override public void handle(IndicoResult result) throws IndicoException {
                         Log.i("Indico Sentiment", "sentiment of: " + result.getSentiment());
                         Double sentiment = result.getSentiment();
                         if (sentiment < 0.4) {
-                            moodText.setText("Negative");
-                        } else if (sentiment > 0.7) {
-                            moodText.setText("Positive");
-                        } else {
-                            moodText.setText("Neutral");
+                            new MyAsyncTask() {
+                                protected void onPostExecute(Boolean result) {
+                                    moodText.setText(translatedText);
+                                    moodText.setTextColor(Color.RED);
+                                }
+                            }.execute("Negative");
+                        }
+                        else if (sentiment > 0.7) {
+                            new MyAsyncTask() {
+                                protected void onPostExecute(Boolean result) {
+                                    moodText.setText(translatedText);
+                                    moodText.setTextColor(Color.GREEN);
+                                }
+                            }.execute("Positive");
+                        }
+                        else {
+                            new MyAsyncTask() {
+                                protected void onPostExecute(Boolean result) {
+                                    moodText.setText(translatedText);
+                                    moodText.setTextColor(Color.DKGRAY);
+                                }
+                            }.execute("Neutral");
                         }
                     }
                 });
             } catch (IOException | IndicoException e) {
                 e.printStackTrace();
             }
+
+
         }
 
         public void onPartialResults(Bundle partialResults) {

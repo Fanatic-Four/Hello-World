@@ -17,15 +17,23 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.gtranslate.Language;
-import com.gtranslate.Translator;
+import com.memetix.mst.language.Language;
+import com.memetix.mst.translate.Translate;
 
 import java.util.ArrayList;
 
+import io.indico.Indico;
+
+
 public class MainActivity extends Activity implements OnClickListener {
-    private TextView mText;
+    private TextView mText, moodText;
     private SpeechRecognizer sr;
-    private static final String TAG = "MyStt3Activity";
+    private static final String TAG = "Poop:";
+
+    TextView text;
+    String translatedText;
+
+    Indico indico;
 
     private Camera mCamera;
     private CameraPreview mPreview;
@@ -60,6 +68,8 @@ public class MainActivity extends Activity implements OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        TextView moodText = (TextView) findViewById(R.id.sentimentText);
+
         Button speakButton = (Button) findViewById(R.id.btnSpeak);
         mText = (TextView) findViewById(R.id.txtSpeechInput);
         speakButton.setOnClickListener(this);
@@ -67,23 +77,30 @@ public class MainActivity extends Activity implements OnClickListener {
         final Listener listener = new Listener();
         sr.setRecognitionListener(listener);
 
+        Indico.init(this, "d463ce24a7695ae2968ad995a1368fc8", null);
+
+
         Button textButton = (Button) findViewById(R.id.onReadySpeech);
         textButton.setVisibility(View.INVISIBLE);
-//        textButton.setOnClickListener(new OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startRecording();
-//            }
-//        });
-//
+
+
+        textButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startRecording();
+                startRecording();
+            }
+        });
+
         Button onStopSpeech = (Button) findViewById(R.id.onStopSpeech);
         onStopSpeech.setVisibility(View.INVISIBLE);
-//        onStopSpeech.setOnClickListener(new OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                sr.stopListening();
-//            }
-//        });
+
+        onStopSpeech.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sr.stopListening();
+            }
+        });
 
 
         /* Camera previews were done using http://developer.android.com/guide/topics/media/camera.html */
@@ -95,6 +112,8 @@ public class MainActivity extends Activity implements OnClickListener {
         mPreview = new CameraPreview(this, mCamera);
         FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
         preview.addView(mPreview);
+
+        //setContentView(text);
 
     }
 
@@ -143,33 +162,36 @@ public class MainActivity extends Activity implements OnClickListener {
                 Log.d(TAG, "result " + data.get(i));
                 //str += data.get(i);
             }
-            //mText.setText("" + data.get(0));
 
-            String currentData = (String) data.get(0);
+            String phrase = (String) data.get(0);
 
-            try {
-                String text = new TranslateTask().execute(currentData).get();
-                mText.setText(text);
-                Log.v("Poop:", text);
-            }
-            catch (Exception e) {
-                Log.e("Poop:", e.toString());
-            }
+            new MyAsyncTask() {
+                protected void onPostExecute(Boolean result) {
+                    mText.setText(translatedText);
+                }
+            }.execute(phrase);
 
-
+            //mText.setText("" + phrase);
 /*
-            Translator.getInstance().execute(currentData, Language.CHINESE_SIMPLIFIED, API_KEY, new Translator.Callback() {
-
-                @Override
-                public void onSuccess(Language detected_lang, String translated_text) {
-                    Log.d(TAG, "onSuccess: language:" + detected_lang.toString() + "\ttext:" + translated_text);
-                }
-
-                @Override
-                public void onFailed(TranslateError e) {
-                    e.printStackTrace();
-                }
-            });
+            try {
+                Indico.sentiment.predict(phrase, new IndicoCallback<IndicoResult>() {
+                    @Override public void handle(IndicoResult result) throws IndicoException {
+                        Log.i("Indico Sentiment", "sentiment of: " + result.getSentiment());
+                        Double sentiment = result.getSentiment();
+                        if (sentiment < 0.4) {
+                            mText.setText("Negative");
+                        }
+                        else if (sentiment > 0.7) {
+                            mText.setText("Positive");
+                        }
+                        else {
+                            mText.setText("Neutral");
+                        }
+                    }
+                });
+            } catch (IOException | IndicoException e) {
+                e.printStackTrace();
+            }
 */
 
         }
@@ -219,25 +241,19 @@ public class MainActivity extends Activity implements OnClickListener {
         return c; // returns null if camera is unavailable
     }
 
-    class TranslateTask extends AsyncTask<String, Void, String> {
-
-        private Exception exception;
-
-        protected String doInBackground(String... input) {
+    class MyAsyncTask extends AsyncTask<String, Integer, Boolean> {
+        @Override
+        protected Boolean doInBackground(String... arg0) {
+            Translate.setClientId("MicrosoftTranslatorJavaAPI");
+            Translate.setClientSecret("0VHbhXQnJrZ7OwVqcoX/PDZlyLJS9co3cVev1TPr8iM=");
             try {
-                Translator translate = Translator.getInstance();
-                String text = translate.translate(input[0], Language.ENGLISH, Language.PORTUGUESE);
-
-                return text;
-            } catch (Exception e) {
-                this.exception = e;
-                return null;
+                translatedText = Translate.execute(arg0[0], Language.ENGLISH, com.memetix.mst.language.Language.FRENCH);
+            } catch(Exception e) {
+                translatedText = e.toString();
             }
-        }
-
-        protected void onPostExecute(String string) {
-            // TODO: check this.exception
-            // TODO: do something with the feed
+            return true;
         }
     }
+
+
 }

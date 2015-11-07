@@ -20,6 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="left|top"
             />
+
     </FrameLayout>
 
     <TextView
@@ -65,5 +66,15 @@
             android:text="Speech Button" />
 
     </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mood"
+        android:id="@+id/sentimentText"
+        android:layout_gravity="center_horizontal|bottom"
+        android:textSize="28dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp" />
 
 </RelativeLayout>

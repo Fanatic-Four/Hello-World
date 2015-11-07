@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.fanaticfour.helloworld"
-        minSdkVersion 14
+        minSdkVersion 15
         targetSdkVersion 21
         versionCode 1
         versionName "1.0"
@@ -22,6 +22,6 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:21.0.2'
-    compile files('libs/gtranslateapi-1.0.jar')
-    compile files('libs/jl1.0.jar')
+    compile 'io.indico:android:1.0.+'
+    compile files('libs/microsoft-translator-java-api-0.6.2-jar-with-dependencies.jar')
 }

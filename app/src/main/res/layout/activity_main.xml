@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="260dp"
         android:textSize="26dp"
         android:textStyle="normal"
         android:text="Talk to me!"
@@ -36,7 +36,7 @@
         android:layout_gravity="center_horizontal|bottom"
         android:textSize="28dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="100dp" />
+        android:layout_marginTop="235dp" />
 
     <LinearLayout
         android:layout_width="wrap_content"

@@ -41,31 +41,6 @@ public class MainActivity extends Activity implements OnClickListener {
 
     private Camera mCamera;
     private CameraPreview mPreview;
-/*
-    private Camera.PictureCallback mPicture = new Camera.PictureCallback() {
-
-        @Override
-        public void onPictureTaken(byte[] data, Camera camera) {
-
-            File pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
-            if (pictureFile == null){
-                Log.d(TAG, "Error creating media file, check storage permissions: " +
-                        e.getMessage());
-                return;
-            }
-
-            try {
-                FileOutputStream fos = new FileOutputStream(pictureFile);
-                fos.write(data);
-                fos.close();
-            } catch (FileNotFoundException e) {
-                Log.d(TAG, "File not found: " + e.getMessage());
-            } catch (IOException e) {
-                Log.d(TAG, "Error accessing file: " + e.getMessage());
-            }
-        }
-    };
-*/
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -73,9 +48,11 @@ public class MainActivity extends Activity implements OnClickListener {
         setContentView(R.layout.activity_main);
 
         Button speakButton = (Button) findViewById(R.id.btnSpeak);
-
+        speakButton.setVisibility(View.INVISIBLE);
         mText = (TextView) findViewById(R.id.txtSpeechInput);
         moodText = (TextView) findViewById(R.id.sentimentText);
+        mText.setTextSize(18);
+        moodText.setTextSize(18);
 
         speakButton.setOnClickListener(this);
         sr = SpeechRecognizer.createSpeechRecognizer(this);
@@ -83,7 +60,6 @@ public class MainActivity extends Activity implements OnClickListener {
         sr.setRecognitionListener(listener);
 
         Indico.init(this, "d463ce24a7695ae2968ad995a1368fc8", null);
-
 
         Button textButton = (Button) findViewById(R.id.onReadySpeech);
         textButton.setVisibility(View.INVISIBLE);
@@ -117,9 +93,14 @@ public class MainActivity extends Activity implements OnClickListener {
         mPreview = new CameraPreview(this, mCamera);
         FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
         preview.addView(mPreview);
-
-        //setContentView(text);
-
+        preview.setOnClickListener(this);
+        preview.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startRecording();
+                startRecording();
+            }
+        });
     }
 
     public void startRecording() {
@@ -165,7 +146,6 @@ public class MainActivity extends Activity implements OnClickListener {
             ArrayList data = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
             for (int i = 0; i < data.size(); i++) {
                 Log.d(TAG, "result " + data.get(i));
-                //str += data.get(i);
             }
 
             String phrase = (String) data.get(0);
@@ -176,20 +156,17 @@ public class MainActivity extends Activity implements OnClickListener {
                 }
             }.execute(phrase);
 
-            //mText.setText("" + phrase);
-
             try {
                 Indico.sentiment.predict(phrase, new IndicoCallback<IndicoResult>() {
-                    @Override public void handle(IndicoResult result) throws IndicoException {
+                    @Override
+                    public void handle(IndicoResult result) throws IndicoException {
                         Log.i("Indico Sentiment", "sentiment of: " + result.getSentiment());
                         Double sentiment = result.getSentiment();
                         if (sentiment < 0.4) {
                             moodText.setText("Negative");
-                        }
-                        else if (sentiment > 0.7) {
+                        } else if (sentiment > 0.7) {
                             moodText.setText("Positive");
-                        }
-                        else {
+                        } else {
                             moodText.setText("Neutral");
                         }
                     }
@@ -197,8 +174,6 @@ public class MainActivity extends Activity implements OnClickListener {
             } catch (IOException | IndicoException e) {
                 e.printStackTrace();
             }
-
-
         }
 
         public void onPartialResults(Bundle partialResults) {
@@ -221,7 +196,6 @@ public class MainActivity extends Activity implements OnClickListener {
             Log.i("111111", "11111111");
         }
     }
-
 
     private boolean checkCameraHardware(Context context) {
         if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {

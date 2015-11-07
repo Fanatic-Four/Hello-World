@@ -12,8 +12,30 @@
         android:layout_height="fill_parent"
         android:layout_weight="1"
         >
-
     </FrameLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Previous Language"
+        android:id="@+id/leftLang"
+        android:layout_gravity="left|top"
+        android:layout_alignParentLeft="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Next Language"
+        android:id="@+id/rightLang"
+        android:layout_gravity="right|top"
+        android:layout_alignParentRight="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/langView"
+        android:layout_gravity="center_horizontal|top"
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:id="@+id/txtSpeechInput"
@@ -37,6 +59,15 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="235dp" />
 
+    <TextView
+        android:id="@+id/setting_checkbox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/setting_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -45,21 +76,6 @@
         android:layout_marginBottom="60dp"
         android:gravity="center"
         android:orientation="vertical" >
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Debug Button - Start"
-            android:id="@+id/onReadySpeech"
-            android:layout_centerHorizontal="true"
-        />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Debug Button - Stop"
-            android:id="@+id/onStopSpeech"
-            android:layout_centerHorizontal="true"/>
 
         <Button
             android:id="@+id/btnSpeak"

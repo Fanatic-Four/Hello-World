@@ -35,10 +35,22 @@ public class MainActivity extends Activity implements OnClickListener {
     private SpeechRecognizer sr;
     private static final String TAG = "Poop:";
 
+    private Button leftLang, rightLang;
+
+    private TextView lang;
+
     TextView text;
     String translatedText;
 
     Indico indico;
+
+    int languageIdx = 0; //English
+
+    private static final int ENGLISH = 0, FRENCH = 1, SPANISH = 2, VIETNAMESE = 3, GERMAN = 4, DUTCH = 5;
+
+    private String[] languages = {
+            "English", "French", "Spanish", "Vietnamese", "German", "Dutch"
+    };
 
     private Camera mCamera;
     private CameraPreview mPreview;
@@ -55,34 +67,31 @@ public class MainActivity extends Activity implements OnClickListener {
         mText.setTextSize(18);
         moodText.setTextSize(18);
 
+        leftLang = (Button) findViewById(R.id.leftLang);
+        rightLang = (Button) findViewById(R.id.rightLang);
+        lang = (TextView) findViewById(R.id.langView);
+
+        leftLang.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //languageIdx
+            }
+        });
+
+        rightLang.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                languageIdx = (languageIdx += 1) % 6;
+                lang.setText(languages[languageIdx]);
+            }
+        });
+
         speakButton.setOnClickListener(this);
         sr = SpeechRecognizer.createSpeechRecognizer(this);
         final Listener listener = new Listener();
         sr.setRecognitionListener(listener);
 
         Indico.init(this, "d463ce24a7695ae2968ad995a1368fc8", null);
-
-        Button textButton = (Button) findViewById(R.id.onReadySpeech);
-        textButton.setVisibility(View.INVISIBLE);
-
-
-        textButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startRecording();
-                startRecording();
-            }
-        });
-
-        Button onStopSpeech = (Button) findViewById(R.id.onStopSpeech);
-        onStopSpeech.setVisibility(View.INVISIBLE);
-
-        onStopSpeech.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sr.stopListening();
-            }
-        });
 
 
         /* Camera previews were done using http://developer.android.com/guide/topics/media/camera.html */
@@ -248,7 +257,27 @@ public class MainActivity extends Activity implements OnClickListener {
             Translate.setClientId("MicrosoftTranslatorJavaAPI");
             Translate.setClientSecret("0VHbhXQnJrZ7OwVqcoX/PDZlyLJS9co3cVev1TPr8iM=");
             try {
-                translatedText = Translate.execute(arg0[0], Language.ENGLISH, com.memetix.mst.language.Language.FRENCH);
+
+                if (languageIdx == 1) {
+                    translatedText = Translate.execute(arg0[0], Language.ENGLISH, com.memetix.mst.language.Language.FRENCH);
+                }
+                else if (languageIdx == 2) {
+                    translatedText = Translate.execute(arg0[0], Language.ENGLISH, com.memetix.mst.language.Language.SPANISH);
+                }
+                else if (languageIdx == 3) {
+                    translatedText = Translate.execute(arg0[0], Language.ENGLISH, com.memetix.mst.language.Language.VIETNAMESE);
+                }
+                else if (languageIdx == 4) {
+                    translatedText = Translate.execute(arg0[0], Language.ENGLISH, com.memetix.mst.language.Language.GERMAN);
+                }
+                else if (languageIdx == 5) {
+                    translatedText = Translate.execute(arg0[0], Language.ENGLISH, com.memetix.mst.language.Language.DUTCH);
+                }
+                else {
+                    translatedText = Translate.execute(arg0[0], Language.ENGLISH, com.memetix.mst.language.Language.ENGLISH);
+                }
+
+
             } catch(Exception e) {
                 translatedText = e.toString();
             }

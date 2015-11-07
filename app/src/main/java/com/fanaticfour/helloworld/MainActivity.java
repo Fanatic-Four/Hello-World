@@ -20,9 +20,13 @@ import android.widget.TextView;
 import com.memetix.mst.language.Language;
 import com.memetix.mst.translate.Translate;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import io.indico.Indico;
+import io.indico.network.IndicoCallback;
+import io.indico.results.IndicoResult;
+import io.indico.utils.IndicoException;
 
 
 public class MainActivity extends Activity implements OnClickListener {
@@ -68,10 +72,11 @@ public class MainActivity extends Activity implements OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        TextView moodText = (TextView) findViewById(R.id.sentimentText);
-
         Button speakButton = (Button) findViewById(R.id.btnSpeak);
+
         mText = (TextView) findViewById(R.id.txtSpeechInput);
+        moodText = (TextView) findViewById(R.id.sentimentText);
+
         speakButton.setOnClickListener(this);
         sr = SpeechRecognizer.createSpeechRecognizer(this);
         final Listener listener = new Listener();
@@ -172,27 +177,27 @@ public class MainActivity extends Activity implements OnClickListener {
             }.execute(phrase);
 
             //mText.setText("" + phrase);
-/*
+
             try {
                 Indico.sentiment.predict(phrase, new IndicoCallback<IndicoResult>() {
                     @Override public void handle(IndicoResult result) throws IndicoException {
                         Log.i("Indico Sentiment", "sentiment of: " + result.getSentiment());
                         Double sentiment = result.getSentiment();
                         if (sentiment < 0.4) {
-                            mText.setText("Negative");
+                            moodText.setText("Negative");
                         }
                         else if (sentiment > 0.7) {
-                            mText.setText("Positive");
+                            moodText.setText("Positive");
                         }
                         else {
-                            mText.setText("Neutral");
+                            moodText.setText("Neutral");
                         }
                     }
                 });
             } catch (IOException | IndicoException e) {
                 e.printStackTrace();
             }
-*/
+
 
         }
 

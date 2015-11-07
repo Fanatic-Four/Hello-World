@@ -1,26 +1,26 @@
 package com.fanaticfour.helloworld;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.hardware.Camera;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
-import android.widget.Button;
-import android.widget.TextView;
-import java.util.ArrayList;
 import android.util.Log;
-
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.hardware.Camera;
-import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.TextView;
+
+import com.gtranslate.Language;
+import com.gtranslate.Translator;
+
+import java.util.ArrayList;
 
 public class MainActivity extends Activity implements OnClickListener {
     private TextView mText;
@@ -143,7 +143,35 @@ public class MainActivity extends Activity implements OnClickListener {
                 Log.d(TAG, "result " + data.get(i));
                 //str += data.get(i);
             }
-            mText.setText("" + data.get(0));
+            //mText.setText("" + data.get(0));
+
+            String currentData = (String) data.get(0);
+
+            try {
+                String text = new TranslateTask().execute(currentData).get();
+                mText.setText(text);
+                Log.v("Poop:", text);
+            }
+            catch (Exception e) {
+                Log.e("Poop:", e.toString());
+            }
+
+
+/*
+            Translator.getInstance().execute(currentData, Language.CHINESE_SIMPLIFIED, API_KEY, new Translator.Callback() {
+
+                @Override
+                public void onSuccess(Language detected_lang, String translated_text) {
+                    Log.d(TAG, "onSuccess: language:" + detected_lang.toString() + "\ttext:" + translated_text);
+                }
+
+                @Override
+                public void onFailed(TranslateError e) {
+                    e.printStackTrace();
+                }
+            });
+*/
+
         }
 
         public void onPartialResults(Bundle partialResults) {
@@ -189,5 +217,27 @@ public class MainActivity extends Activity implements OnClickListener {
             // Camera is not available (in use or does not exist)
         }
         return c; // returns null if camera is unavailable
+    }
+
+    class TranslateTask extends AsyncTask<String, Void, String> {
+
+        private Exception exception;
+
+        protected String doInBackground(String... input) {
+            try {
+                Translator translate = Translator.getInstance();
+                String text = translate.translate(input[0], Language.ENGLISH, Language.PORTUGUESE);
+
+                return text;
+            } catch (Exception e) {
+                this.exception = e;
+                return null;
+            }
+        }
+
+        protected void onPostExecute(String string) {
+            // TODO: check this.exception
+            // TODO: do something with the feed
+        }
     }
 }

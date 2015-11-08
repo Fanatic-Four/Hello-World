@@ -1,7 +1,7 @@
 # Hello-World
-November 7 - HackHolyoke - 2015
-Won first place prize.
-Team Members: Tommy Nguyen, Kayla Nguyen, Calvin Mei, Aint Myat Noe
+##November 7 - HackHolyoke - 2015
+##First Place Winner
+##Team Members: Tommy Nguyen, Kayla Nguyen, Calvin Mei, Aint Myat Noe
 
 ###Ever wanted real-life subtitles when hanging out with your multi-lingual friends or relatives? Now you can!
 

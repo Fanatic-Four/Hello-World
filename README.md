@@ -1,5 +1,5 @@
 # Hello-World
-#####November 7 | HackHolyoke 2015
+#####November 6-7 | HackHolyoke 2015
 #####First Place Winner
 #####Team Members: Tommy Nguyen, Kayla Nguyen, Calvin Mei, Aint Myat Noe
 
@@ -24,7 +24,7 @@ After having four people work more hours than I can count on the same problem, w
 We learned about how to send HTTP GET requests from android, various Android development, how to use Indico API's, and how difficult some API's can be to use.
 
 ##What's next for Hello-World
--Support for speech detection of more languages 
--Support for translation to more language-subtitles 
--Continuous detection of speech. 
--Porting this app onto other platforms: Oculus, AR, etc.
+  *Support for speech detection of more languages  
+  *Support for translation to more language-subtitles  
+  *Continuous detection of speech.  
+  *Porting this app onto other platforms: Oculus, AR, etc.  

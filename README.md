@@ -1,5 +1,5 @@
 # Hello-World
-#####November 7 - HackHolyoke - 2015
+#####November 7 | HackHolyoke 2015
 #####First Place Winner
 #####Team Members: Tommy Nguyen, Kayla Nguyen, Calvin Mei, Aint Myat Noe
 

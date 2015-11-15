@@ -17,6 +17,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.memetix.mst.language.Language;
 import com.memetix.mst.translate.Translate;
@@ -80,7 +81,12 @@ public class MainActivity extends Activity implements OnClickListener {
                 else {
                     languageIdx = (languageIdx - 1);
                 }
-                lang.setText(languages[languageIdx]);
+                //lang.setText(languages[languageIdx]);
+                Context context = getApplicationContext();
+                int duration = Toast.LENGTH_SHORT;
+
+                Toast toast = Toast.makeText(context, languages[languageIdx], duration);
+                toast.show();
             }
         });
 
@@ -88,7 +94,14 @@ public class MainActivity extends Activity implements OnClickListener {
             @Override
             public void onClick(View view) {
                 languageIdx = (languageIdx += 1) % 6;
-                lang.setText(languages[languageIdx]);
+                //lang.setText(languages[languageIdx]);
+
+                Context context = getApplicationContext();
+                int duration = Toast.LENGTH_SHORT;
+
+                Toast toast = Toast.makeText(context, languages[languageIdx], duration);
+                toast.show();
+
             }
         });
 
